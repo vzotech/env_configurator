@@ -9,13 +9,30 @@ import 'package:yaml/yaml.dart';
 
 class EnvConfigurator {
   Future<void> generate(String configFilePath, String env, String className) async {
+    print(Colorize('✓ Info: using $env env')..green());
     final config = await _loadConfig(configFilePath);
+    if (config == null) {
+      print(Colorize('✗ Error: failed to parse $configFilePath')..red());
+      return;
+    }
+    if (!config.containsKey(env)) {
+      print(Colorize('✗ Error: failed to find env $env in file $configFilePath')..red());
+      return;
+    }
     final YamlMap variables = config[env]['variables'];
+    if (variables != null) {
+      final manifestXML = await _readAndroidManifestFile();
+      final androidPackageName = _getPackageName(manifestXML);
+      await _generateCodeFiles(className, variables, androidPackageName);
+    } else {
+      print(Colorize('️⚠ Warning: [$env] variables key not found')..yellow());
+    }
     final YamlMap files = config[env]['files'];
-    final manifestXML = await _readAndroidManifestFile();
-    final androidPackageName = _getPackageName(manifestXML);
-    await _generateCodeFiles(className, variables, androidPackageName);
-    await _copyFiles(files);
+    if (files != null) {
+      await _copyFiles(files);
+    } else {
+      print(Colorize('⚠ Warning: [$env] files key not found')..yellow());
+    }
   }
 
   Future<YamlMap> _loadConfig(String configFileName) async {
@@ -60,9 +77,9 @@ class EnvConfigurator {
     try {
       final f = File(filePath);
       await f.writeAsString(data);
-      print(Colorize('✓ Generated $filePath')..green());
+      print(Colorize('✓ Success: generated $filePath')..green());
     } catch (error) {
-      print(Colorize('✗ Failed to create $filePath')..red());
+      print(Colorize('✗ Failed: error generating $filePath')..red());
     }
   }
 
@@ -78,12 +95,12 @@ class EnvConfigurator {
         final srcFile = File(srcFilePath);
         if (await srcFile.exists()) {
           final resp = await srcFile.copy(targetFilePath);
-          print(Colorize('✓ ${keyReCase.sentenceCase}')..green());
+          print(Colorize('✓ Success: ${keyReCase.sentenceCase}')..green());
         } else {
-          print(Colorize('✗ ${keyReCase.sentenceCase} - file not exists')..red());
+          print(Colorize('✗ Failed: ${keyReCase.sentenceCase} - file not exists')..red());
         }
       } catch (error) {
-        print(Colorize('✗ Failed ${keyReCase.sentenceCase}')..red());
+        print(Colorize('✗ Failed: ${keyReCase.sentenceCase}')..red());
       }
     }
   }
