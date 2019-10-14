@@ -1,6 +1,6 @@
 name: env_configurator
 description: A starting point for Dart libraries or applications.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/vzotech/env_configurator
 author: mahmed <mahmed8003@gmail.com>
 
