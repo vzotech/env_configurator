@@ -1,19 +1,20 @@
 name: env_configurator
-description: A starting point for Dart libraries or applications.
-version: 0.1.1
+description: A package to manage configuration variables and configuration files on flutter and native platforms level
+version: 0.2.0
 homepage: https://github.com/vzotech/env_configurator
 author: mahmed <mahmed8003@gmail.com>
 
 environment:
-  sdk: '>=2.3.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  args: ^1.5.2
-  colorize: ^2.0.0
-  yaml: ^2.2.0
-  xml: ^3.5.0
-  recase: ^2.0.1
+  args: ^2.1.0
+  colorize: ^3.0.0
+  yaml: ^3.1.0
+  xml: ^5.1.1
+  recase: ^4.0.0
 
 dev_dependencies:
-  pedantic: ^1.8.0
-  test: ^1.6.0
+  pedantic: ^1.11.0
+  test: ^1.17.4
+

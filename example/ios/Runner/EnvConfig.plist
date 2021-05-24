@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FACEBOOK_APP_ID</key>
+	<string>$(FACEBOOK_APP_ID)</string>
+	<key>FB_LOGIN_PROTOCOL_SCHEME</key>
+	<string>$(FB_LOGIN_PROTOCOL_SCHEME)</string>
+	<key>GOOGLE_LOGIN_PROTOCOL_SCHEME</key>
+	<string>$(GOOGLE_LOGIN_PROTOCOL_SCHEME)</string>
+	<key>GOOGLE_MAPS_API_KEY</key>
+	<string>$(GOOGLE_MAPS_API_KEY)</string>
+	<key>SOME_INT</key>
+	<integer>$(SOME_INT)</integer>
+	<key>SOME_DECIMAL_NUMBER</key>
+	<real>$(SOME_DECIMAL_NUMBER)</real>
+</dict>
+</plist>

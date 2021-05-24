@@ -1,0 +1,17 @@
+# development env
+variables:
+  facebook_app_id: '421720451234247'
+  fb_login_protocol_scheme: 'fb421720451234247'
+  google_login_protocol_scheme: 'com.googleusercontent.apps.1234567812345678-je55jt95q7uc15fme0fudb87vvipnftevvro'
+  google_maps_api_key: 'BIzaSyAAbir5DAWT_lomin25RkUzxcvb123yCnDEG'
+  someInt: 123
+  someDecimalNumber: 126.45
+
+
+files:
+  copy_ios_firebase_file:
+    source: './config/dev/GoogleService-Info.plist'
+    target: './ios/Runner/GoogleService-Info.plist'
+  copy_android_firebase_file:
+    source: './config/dev/google-services.json'
+    target: './android/app/google-services.json'
