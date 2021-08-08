@@ -6,6 +6,4 @@
   <string name="fb_login_protocol_scheme">fb421720451234247</string>
   <string name="google_login_protocol_scheme">com.googleusercontent.apps.1234567812345678-je55jt95q7uc15fme0fudb87vvipnftevvro</string>
   <string name="google_maps_api_key">BIzaSyAAbir5DAWT_lomin25RkUzxcvb123yCnDEG</string>
-  <integer name="some_int">123</integer>
-  <fraction name="some_decimal_number">126.45</fraction>
 </resources>

@@ -3,16 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>FACEBOOK_APP_ID</key>
-	<string>$(FACEBOOK_APP_ID)</string>
+	<string>421720451234247</string>
 	<key>FB_LOGIN_PROTOCOL_SCHEME</key>
-	<string>$(FB_LOGIN_PROTOCOL_SCHEME)</string>
+	<string>fb421720451234247</string>
 	<key>GOOGLE_LOGIN_PROTOCOL_SCHEME</key>
-	<string>$(GOOGLE_LOGIN_PROTOCOL_SCHEME)</string>
+	<string>com.googleusercontent.apps.1234567812345678-je55jt95q7uc15fme0fudb87vvipnftevvro</string>
 	<key>GOOGLE_MAPS_API_KEY</key>
-	<string>$(GOOGLE_MAPS_API_KEY)</string>
-	<key>SOME_INT</key>
-	<integer>$(SOME_INT)</integer>
-	<key>SOME_DECIMAL_NUMBER</key>
-	<real>$(SOME_DECIMAL_NUMBER)</real>
+	<string>BIzaSyAAbir5DAWT_lomin25RkUzxcvb123yCnDEG</string>
 </dict>
 </plist>
