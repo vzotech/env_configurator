@@ -1,3 +1,6 @@
+## 0.3.0
+- Updated dependencies version, handling single env, handling strings only
+
 ## 0.2.0
 - Updated dependencies version and put some more checks
 
