@@ -1,6 +1,6 @@
 name: env_configurator
 description: A package to manage configuration variables and configuration files on flutter and native platforms level
-version: 0.2.0
+version: 0.3.0
 homepage: https://github.com/vzotech/env_configurator
 author: mahmed <mahmed8003@gmail.com>
 
