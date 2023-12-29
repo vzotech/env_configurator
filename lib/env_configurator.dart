@@ -34,16 +34,15 @@ class EnvConfigurator {
       return;
     }
 
-    final manifestXML = await _readAndroidManifestFile();
-    final androidPackageName = _getPackageName(manifestXML);
-    if (androidPackageName == null) {
+    final androidNamespace = await _getAndroidNamespace();
+    if (androidNamespace == null) {
       print(Colorize('✗ Error: failed to find android package name')..red());
       return;
     }
 
     final YamlMap? variables = config['variables'];
     if (variables != null) {
-      await _generateCodeFiles(className, variables, androidPackageName);
+      await _generateCodeFiles(className, variables, androidNamespace);
     } else {
       print(Colorize('️⚠ Warning: variables key not found')..yellow());
     }
@@ -70,35 +69,78 @@ class EnvConfigurator {
   ///
   ///
   Future<void> _generateCodeFiles(
-      String className, YamlMap variables, String androidPackageName) async {
+    String className,
+    YamlMap variables,
+    String androidPackageName,
+  ) async {
+    await _generateDartFiles(className: className, variables: variables);
+    await _generateIosFiles(className: className, variables: variables);
+    await _generateAndroidFiles(
+      className: className,
+      variables: variables,
+      androidPackageName: androidPackageName,
+    );
+  }
+
+  ///
+  ///
+  ///
+  Future<void> _generateDartFiles({
+    required String className,
+    required YamlMap variables,
+  }) async {
     final dartCode = _generateDartCode(className, variables);
 
+    final fileNameReCase = ReCase(className);
+    final dartFilePath = './lib/${fileNameReCase.snakeCase}.dart';
+
+    await _writeToFile(dartFilePath, dartCode);
+  }
+
+  /// Generate IOS related files
+  ///
+  ///
+  Future<void> _generateIosFiles({
+    required String className,
+    required YamlMap variables,
+  }) async {
     final swiftCode = _generateSwiftCode(className, variables);
     final xcConfigCode = _generateXCConfigCode(variables);
     final pListCode = _generatePListCode(variables);
 
-    final kotlinCode =
-        _generateKotlinCode(className, variables, androidPackageName);
-    final xmlCode = _generateXMLResourceCode(variables);
-
     final fileNameReCase = ReCase(className);
-    final dartFilePath = './lib/${fileNameReCase.snakeCase}.dart';
 
     final iosFilePath = './ios/Runner/${fileNameReCase.pascalCase}.swift';
     final xcConfigFilePath =
         './ios/Flutter/${fileNameReCase.pascalCase}.xcconfig';
     final pListFilePath = './ios/Runner/${fileNameReCase.pascalCase}.plist';
 
+    await _writeToFile(iosFilePath, swiftCode);
+    await _writeToFile(xcConfigFilePath, xcConfigCode);
+    await _writeToFile(pListFilePath, pListCode);
+  }
+
+  /// Generate Android related files
+  ///
+  ///
+  Future<void> _generateAndroidFiles({
+    required String className,
+    required YamlMap variables,
+    required String androidPackageName,
+  }) async {
+    final kotlinCode = _generateKotlinCode(
+      className,
+      variables,
+      androidPackageName,
+    );
+    final xmlCode = _generateXMLResourceCode(variables);
+
+    final fileNameReCase = ReCase(className);
+
     final androidFilePath =
         './android/app/src/main/kotlin/${androidPackageName.replaceAll('.', '/')}/${fileNameReCase.pascalCase}.kt';
     final androidXMLFilePath =
         './android/app/src/main/res/values/${fileNameReCase.snakeCase}.xml';
-
-    await _writeToFile(dartFilePath, dartCode);
-
-    await _writeToFile(iosFilePath, swiftCode);
-    await _writeToFile(xcConfigFilePath, xcConfigCode);
-    await _writeToFile(pListFilePath, pListCode);
 
     await _writeToFile(androidFilePath, kotlinCode);
     await _writeToFile(androidXMLFilePath, xmlCode);
@@ -141,31 +183,22 @@ class EnvConfigurator {
     }
   }
 
-  /// Load android manifest file
+  /// Load android gradle file
   ///
   ///
-  Future<XmlDocument> _readAndroidManifestFile() async {
-    final manifestFilePath = './android/app/src/main/AndroidManifest.xml';
-    final manifestFile = File(manifestFilePath);
-    final manifestText = await manifestFile.readAsString();
-    final manifestXML = XmlDocument.parse(manifestText);
-    return manifestXML;
-  }
+  Future<String?> _getAndroidNamespace() async {
+    final gradleFilePath = './android/app/build.gradle';
+    final gradleFile = File(gradleFilePath);
+    final gradleFileText = await gradleFile.readAsString();
 
-  /// Get package name from manifest file
-  ///
-  ///
-  String? _getPackageName(XmlDocument manifestXML) {
-    final manifestElements = manifestXML.findElements('manifest');
-    if (manifestElements.length == 1) {
-      final manifest = manifestElements.first;
-      for (final attribute in manifest.attributes) {
-        if (attribute.name.toString() == 'package') {
-          return attribute.value;
-        }
-      }
+    final regex = RegExp('namespace "(.*?)"');
+    final result = regex.firstMatch(gradleFileText);
+    if (result != null && result.groupCount > 0) {
+      final namespaceLine = result.group(0);
+      final packageName =
+          namespaceLine?.replaceAll('namespace "', '').replaceAll('"', '');
+      return packageName;
     }
-
     return null;
   }
 
